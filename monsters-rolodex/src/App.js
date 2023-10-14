@@ -6,37 +6,57 @@ class App extends Component {
     super();
     this.state = {
       people: [],
+      search: "",
     };
   }
 
-  componentDidMount() {
-    const handleChange = async () => {
-      const fetchResult = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
-      )
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res);
-        })
-        .then((data) => Promise.resolve(data))
-        .catch((res) => console.error(res.status));
+  async componentDidMount() {
+    const fetchResult = await fetch(
+      "https://jsonplaceholder.typicode.com/users"
+    )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(res);
+      })
+      .then((data) => Promise.resolve(data))
+      .catch((res) => console.error(res.status));
 
-      this.setState({ people: fetchResult }, () => {
-        console.log("State: ", this.state);
-      });
-    };
+    this.setState({ people: fetchResult }, () => {
+      console.log("State: ", this.state);
+    });
+  }
 
-    handleChange();
+  handleSearch(e) {
+    const searchValue = e.target.value.toLowerCase();
+    this.setState({ search: searchValue }, () => {
+      console.log("Search: ", this.state.search);
+    });
+  }
+
+  filterSearch() {
+    const searchValue = this.state.search;
+    const { people } = this.state;
+    return people.filter((person) => {
+      return person.name.toLowerCase().includes(searchValue);
+    });
   }
 
   render() {
+    const searchResult = this.filterSearch();
     return (
       <div className="App">
         <header className="App-header">
           <h2>List of People</h2>
-          {this.state.people ? null : (
+          <input
+            type="search"
+            className="app--input"
+            placeholder="Search..."
+            value={this.state.search}
+            onChange={(e) => this.handleSearch(e)}
+          />
+          {searchResult ? null : (
             <div>
               <p
                 style={{ color: "red", fontSize: "42px", fontWeight: "bolder" }}
@@ -45,8 +65,8 @@ class App extends Component {
               </p>
             </div>
           )}
-          {!this.state.people ? null : this.state.people.length > 0 ? (
-            this.state.people.map((person) => {
+          {!searchResult ? null : searchResult.length > 0 ? (
+            searchResult.map((person) => {
               return (
                 <p key={person.id}>
                   {person.id}. {person.name}

@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.app--input {
+  font-size: 2rem;
+  width: 60vw;
+  max-width: 720px;
+  padding: 15px 60px;
+  border: none;
+  border-radius: 50px;
+  outline: none;
+  margin: 10px 0;
+}
