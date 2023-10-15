@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import CardList from "./components/CardList/CardList";
 
 class App extends Component {
   constructor() {
@@ -56,6 +57,7 @@ class App extends Component {
             value={this.state.search}
             onChange={(e) => this.handleSearch(e)}
           />
+          <CardList />
           {searchResult ? null : (
             <div>
               <p
