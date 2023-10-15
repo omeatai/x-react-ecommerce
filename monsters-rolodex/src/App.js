@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import CardList from "./components/CardList/CardList";
 import SearchBox from "./components/SearchBox/SearchBox";
@@ -6,37 +6,40 @@ import SearchBox from "./components/SearchBox/SearchBox";
 const App = () => {
   const [people, setPeople] = useState([]);
   const [search, setSearch] = useState("");
+  const [searchResult, setSearchResult] = useState("");
 
-  const getPeople = async () => {
-    const fetchResult = await fetch(
-      "https://jsonplaceholder.typicode.com/users"
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res);
-      })
-      .then((data) => Promise.resolve(data))
-      .catch((res) => console.error(res.status));
+  useEffect(() => {
+    const getPeople = async () => {
+      const fetchResult = await fetch(
+        "https://jsonplaceholder.typicode.com/users"
+      )
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(res);
+        })
+        .then((data) => Promise.resolve(data))
+        .catch((res) => console.error(res.status));
 
-    setPeople(fetchResult);
-  };
+      setPeople(fetchResult);
+    };
 
-  getPeople();
+    getPeople();
+  }, []);
+
+  useEffect(() => {
+    const result = people?.filter((person) => {
+      return person.name.toLowerCase().includes(search);
+    });
+    setSearchResult(result);
+  }, [search, people]);
 
   const handleSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
     setSearch(searchValue);
   };
 
-  const filterSearch = () => {
-    return people.filter((person) => {
-      return person.name.toLowerCase().includes(search);
-    });
-  };
-
-  const searchResult = filterSearch();
   return (
     <div className="App">
       <header className="App-header">
@@ -53,4 +56,5 @@ const App = () => {
     </div>
   );
 };
+
 export default App;
