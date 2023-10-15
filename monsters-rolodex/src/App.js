@@ -1,18 +1,13 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import CardList from "./components/CardList/CardList";
 import SearchBox from "./components/SearchBox/SearchBox";
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      people: [],
-      search: "",
-    };
-  }
+const App = () => {
+  const [people, setPeople] = useState([]);
+  const [search, setSearch] = useState("");
 
-  async componentDidMount() {
+  const getPeople = async () => {
     const fetchResult = await fetch(
       "https://jsonplaceholder.typicode.com/users"
     )
@@ -25,44 +20,37 @@ class App extends Component {
       .then((data) => Promise.resolve(data))
       .catch((res) => console.error(res.status));
 
-    this.setState({ people: fetchResult }, () => {
-      console.log("State: ", this.state);
-    });
-  }
+    setPeople(fetchResult);
+  };
 
-  handleSearch(e) {
+  getPeople();
+
+  const handleSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
-    this.setState({ search: searchValue }, () => {
-      console.log("Search: ", this.state.search);
-    });
-  }
+    setSearch(searchValue);
+  };
 
-  filterSearch() {
-    const searchValue = this.state.search;
-    const { people } = this.state;
+  const filterSearch = () => {
     return people.filter((person) => {
-      return person.name.toLowerCase().includes(searchValue);
+      return person.name.toLowerCase().includes(search);
     });
-  }
+  };
 
-  render() {
-    const searchResult = this.filterSearch();
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="app-title">Monsters Rolodex</h1>
-          <SearchBox
-            type={"search"}
-            className={"app--input"}
-            placeholder={"Search..."}
-            value={this.state.search}
-            handleSearch={(e) => this.handleSearch(e)}
-          />
-          <CardList searchResult={searchResult} />
-        </header>
-      </div>
-    );
-  }
-}
-
+  const searchResult = filterSearch();
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1 className="app-title">Monsters Rolodex</h1>
+        <SearchBox
+          type={"search"}
+          className={"app--input"}
+          placeholder={"Search..."}
+          value={search}
+          handleSearch={(e) => handleSearch(e)}
+        />
+        <CardList searchResult={searchResult} />
+      </header>
+    </div>
+  );
+};
 export default App;

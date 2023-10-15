@@ -14,5 +14,4 @@ const SearchBox = ({ type, className, placeholder, value, handleSearch }) => {
     </section>
   );
 };
-
 export default SearchBox;

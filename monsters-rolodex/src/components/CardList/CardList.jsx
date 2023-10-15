@@ -33,5 +33,4 @@ const CardList = ({ searchResult }) => {
     </section>
   );
 };
-
 export default CardList;
