@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import CardList from "./components/CardList/CardList";
+import SearchBox from "./components/SearchBox/SearchBox";
 
 class App extends Component {
   constructor() {
@@ -50,12 +51,12 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h2>List of People</h2>
-          <input
-            type="search"
-            className="app--input"
-            placeholder="Search..."
+          <SearchBox
+            type={"search"}
+            className={"app--input"}
+            placeholder={"Search..."}
             value={this.state.search}
-            onChange={(e) => this.handleSearch(e)}
+            handleSearch={(e) => this.handleSearch(e)}
           />
           <CardList searchResult={searchResult} />
         </header>
