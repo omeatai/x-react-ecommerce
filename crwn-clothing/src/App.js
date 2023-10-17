@@ -6,9 +6,9 @@ import Shop from "./routes/Shop/Shop";
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/shop" element={<Shop />} />
+      <Route path="/" element={<Home />}>
+        <Route path="shop" element={<Shop />} />
+      </Route>
     </Routes>
   );
 };
