@@ -3,23 +3,23 @@ import { Outlet, Link } from "react-router-dom";
 
 import { ReactComponent as CrwnLogo } from "../../assets/crown.svg";
 import { UserContext } from "../../contexts/userContext";
+import { CartContext } from "../../contexts/cartContext";
 
 import { signOutUser } from "../../utils/firebase/firebase";
+
+import CartIcon from "../../components/CartIcon/CartIcon";
+import CartDropDown from "../../components/CartDropDown/CartDropDown";
 
 import "./Navigation.scss";
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
+  const { isCartOpen } = useContext(CartContext);
 
   const getEmailUsername = (email) => {
     const re = /(.*)@.+/;
     return email.replace(re, "$1").toUpperCase();
   };
-
-  // const signOutHandler = async () => {
-  //   await signOutUser();
-  //   setCurrentUser(null);
-  // };
 
   return (
     <Fragment>
@@ -48,7 +48,9 @@ const Navigation = () => {
               <strong>Welcome, {getEmailUsername(currentUser.email)}!</strong>
             </Link>
           ) : null}
+          <CartIcon />
         </div>
+        {isCartOpen && <CartDropDown />}
       </div>
       <Outlet />
     </Fragment>
