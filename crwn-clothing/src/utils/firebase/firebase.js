@@ -7,6 +7,8 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -20,6 +22,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
+// Google Provider Authentication
 const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({
@@ -28,3 +31,24 @@ provider.setCustomParameters({
 
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+
+//Check if the user record (document) exists in Firebase
+export const db = getFirestore();
+
+export const createUserDocumentFromAuth = async (userAuth) => {
+  // Get reference to user uid in the "users" table/collection
+  const userDocRef = doc(db, "users", userAuth.uid);
+  console.log(userDocRef);
+
+  // get the user record (document) in the "users" table/collection
+  const userSnapshot = await getDoc(userDocRef);
+  console.log(userSnapshot);
+
+  // Checks if record (document) exists
+  console.log(userSnapshot.exists());
+  if (userSnapshot.exists()) {
+    console.log("User exists in database");
+  } else {
+    console.log("User does not exist in database");
+  }
+};
