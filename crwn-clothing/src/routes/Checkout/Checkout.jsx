@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 
 import { CartContext } from "../../contexts/cartContext";
+import CheckoutItem from "../../components/CheckoutItem/CheckoutItem";
 
 import "./Checkout.scss";
 
@@ -27,28 +28,11 @@ const Checkout = () => {
           <span>Remove</span>
         </div>
       </div>
-      <div>
-        {cartItems.map((cartItem) => {
-          const { id, name, quantity } = cartItem;
-          return (
-            <div key={id}>
-              <h2>{name}</h2>
-              <span>{quantity}</span>
-              <span>
-                <button onClick={() => removeItemFromCart(cartItem)}>
-                  decrement
-                </button>
-              </span>
-              <span>
-                <button onClick={() => addItemToCart(cartItem)}>
-                  increment
-                </button>
-              </span>
-            </div>
-          );
-        })}
-        <span className="total">Total: 0</span>
-      </div>
+
+      {cartItems.map((cartItem) => {
+        return <CheckoutItem key={cartItem.id} cartItem={cartItem} />;
+      })}
+      <span className="total">Total: 0</span>
     </div>
   );
 };
