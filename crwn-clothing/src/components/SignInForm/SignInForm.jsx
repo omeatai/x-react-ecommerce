@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+import { UserContext } from "../../contexts/userContext";
 
 import {
   signInWithGooglePopup,
@@ -17,8 +19,9 @@ const defaultFormFields = {
 
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
-
   const { email, password } = formFields;
+
+  const { setCurrentUser } = useContext(UserContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -29,34 +32,47 @@ const SignInForm = () => {
     setFormFields(defaultFormFields);
   };
 
+  // Sign in with Google account
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    try {
+      const { user } = await signInWithGooglePopup();
+      if (user) {
+        setCurrentUser(user);
+        // console.log(user);
+      } else {
+        console.log("User is not authenticated. Token Invalid!");
+      }
+      // await createUserDocumentFromAuth(user);
+    } catch (error) {
+      console.log(error.code, error.message);
+    }
   };
 
+  // Sign in with Auth User With Email And Password
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!email || !password) {
+      alert("Both Username and Password are Required!");
       return;
     }
 
     try {
-      const response = await signInAuthUserWithEmailAndPassword(
+      const { user } = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
-      console.log(response);
+      if (user) {
+        setCurrentUser(user);
+        // console.log(user);
+      }
       resetFormFields();
     } catch (error) {
-      // if (error.code === "auth/wrong-password") {
-      //   alert("incorrect password for email");
-      // }
       switch (error.code) {
         case "auth/wrong-password":
-          alert("incorrect password for email");
+          alert("Username or Password is Invalid!");
           break;
         case "auth/user-not-found":
-          alert("No User with this email");
+          alert("Username or Password is Invalid!");
           break;
         default:
           console.log(error);
