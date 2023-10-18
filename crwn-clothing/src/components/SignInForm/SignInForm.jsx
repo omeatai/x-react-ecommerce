@@ -1,11 +1,10 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import { UserContext } from "../../contexts/userContext";
+// import { UserContext } from "../../contexts/userContext";
 
 import {
   signInWithGooglePopup,
   signInAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase";
 
 import FormInput from "../FormInput/FormInput";
@@ -21,7 +20,7 @@ const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  const { setCurrentUser } = useContext(UserContext);
+  // const { setCurrentUser } = useContext(UserContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,14 +34,9 @@ const SignInForm = () => {
   // Sign in with Google account
   const signInWithGoogle = async () => {
     try {
-      const { user } = await signInWithGooglePopup();
-      if (user) {
-        setCurrentUser(user);
-        // console.log(user);
-      } else {
-        console.log("User is not authenticated. Token Invalid!");
-      }
-      await createUserDocumentFromAuth(user);
+      await signInWithGooglePopup();
+      // const { user } = await signInWithGooglePopup();
+      // await createUserDocumentFromAuth(user);
     } catch (error) {
       console.log(error.code, error.message);
     }
@@ -62,8 +56,7 @@ const SignInForm = () => {
         password
       );
       if (user) {
-        setCurrentUser(user);
-        // console.log(user);
+        // setCurrentUser(user);
       }
       resetFormFields();
     } catch (error) {

@@ -9,17 +9,17 @@ import { signOutUser } from "../../utils/firebase/firebase";
 import "./Navigation.scss";
 
 const Navigation = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const getEmailUsername = (email) => {
     const re = /(.*)@.+/;
     return email.replace(re, "$1").toUpperCase();
   };
 
-  const signOutHandler = async () => {
-    await signOutUser();
-    setCurrentUser(null);
-  };
+  // const signOutHandler = async () => {
+  //   await signOutUser();
+  //   setCurrentUser(null);
+  // };
 
   return (
     <Fragment>
@@ -35,7 +35,7 @@ const Navigation = () => {
             SHOP
           </Link>
           {currentUser ? (
-            <Link className="nav-link" to="#" onClick={signOutHandler}>
+            <Link className="nav-link" to="#" onClick={signOutUser}>
               SIGN OUT
             </Link>
           ) : (
