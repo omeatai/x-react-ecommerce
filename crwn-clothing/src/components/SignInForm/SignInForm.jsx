@@ -42,7 +42,7 @@ const SignInForm = () => {
       } else {
         console.log("User is not authenticated. Token Invalid!");
       }
-      // await createUserDocumentFromAuth(user);
+      await createUserDocumentFromAuth(user);
     } catch (error) {
       console.log(error.code, error.message);
     }

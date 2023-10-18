@@ -4,11 +4,22 @@ import { Outlet, Link } from "react-router-dom";
 import { ReactComponent as CrwnLogo } from "../../assets/crown.svg";
 import { UserContext } from "../../contexts/userContext";
 
+import { signOutUser } from "../../utils/firebase/firebase";
+
 import "./Navigation.scss";
 
 const Navigation = () => {
-  const { currentUser } = useContext(UserContext);
-  console.log(currentUser);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+
+  const getEmailUsername = (email) => {
+    const re = /(.*)@.+/;
+    return email.replace(re, "$1").toUpperCase();
+  };
+
+  const signOutHandler = async () => {
+    await signOutUser();
+    setCurrentUser(null);
+  };
 
   return (
     <Fragment>
@@ -23,13 +34,20 @@ const Navigation = () => {
           <Link className="nav-link" to="/shop">
             SHOP
           </Link>
-          <Link className="nav-link" to="/auth">
-            SIGN IN
-          </Link>
-          <Link className="nav-link" to="/home">
-            {/* WELCOME, {currentUser ? currentUser.displayName : "VISITOR"} */}
-            WELCOME,
-          </Link>
+          {currentUser ? (
+            <Link className="nav-link" to="#" onClick={signOutHandler}>
+              SIGN OUT
+            </Link>
+          ) : (
+            <Link className="nav-link" to="/auth">
+              SIGN IN
+            </Link>
+          )}
+          {currentUser ? (
+            <Link className="nav-link" to="#">
+              <strong>Welcome, {getEmailUsername(currentUser.email)}!</strong>
+            </Link>
+          ) : null}
         </div>
       </div>
       <Outlet />
