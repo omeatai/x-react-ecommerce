@@ -2,10 +2,11 @@ import React from "react";
 import SignUpForm from "../../components/SignUpForm/SignUpForm";
 import SignInForm from "../../components/SignInForm/SignInForm";
 
+import "./Authentication.scss";
+
 const Authentication = () => {
   return (
-    <div>
-      <h1>Sign In Page</h1>
+    <div className="authentication-container">
       <SignInForm />
       <SignUpForm />
     </div>
