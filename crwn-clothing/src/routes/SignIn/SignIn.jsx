@@ -12,7 +12,9 @@ const SignIn = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getRedirectResult(auth);
-      console.log(response);
+      if (response) {
+        const userDocRef = await createUserDocumentFromAuth(response.user);
+      }
     };
     fetchData();
   }, []);
@@ -20,7 +22,6 @@ const SignIn = () => {
   const logGoogleuser = async () => {
     const response = await signInWithGooglePopup();
     const userDocRef = await createUserDocumentFromAuth(response.user);
-    console.log(userDocRef);
   };
 
   return (
