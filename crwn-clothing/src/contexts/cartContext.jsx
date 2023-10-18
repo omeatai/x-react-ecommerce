@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 // as the actual value you want to access
 export const CartContext = createContext({
@@ -6,11 +6,20 @@ export const CartContext = createContext({
   setIsCartOpen: () => {},
   cartItems: [],
   addItemToCart: () => {},
+  cartCount: 0,
 });
 
 export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const newCartCount = cartItems.reduce((total, cartItem) => {
+      return total + cartItem.quantity;
+    }, 0);
+    setCartCount(newCartCount);
+  }, [cartItems]);
 
   const addItemToCart = (productToAdd) => {
     const addCartItem = (cartItems, productToAdd) => {
@@ -35,7 +44,13 @@ export const CartProvider = ({ children }) => {
     setCartItems(addCartItem(cartItems, productToAdd));
   };
 
-  const value = { isCartOpen, setIsCartOpen, cartItems, addItemToCart };
+  const value = {
+    isCartOpen,
+    setIsCartOpen,
+    cartItems,
+    addItemToCart,
+    cartCount,
+  };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
