@@ -38,17 +38,30 @@ export const db = getFirestore();
 export const createUserDocumentFromAuth = async (userAuth) => {
   // Get reference to user uid in the "users" table/collection
   const userDocRef = doc(db, "users", userAuth.uid);
-  console.log(userDocRef);
 
   // get the user record (document) in the "users" table/collection
   const userSnapshot = await getDoc(userDocRef);
-  console.log(userSnapshot);
 
   // Checks if record (document) exists
-  console.log(userSnapshot.exists());
-  if (userSnapshot.exists()) {
-    console.log("User exists in database");
+  //   console.log(userSnapshot.exists());
+
+  if (!userSnapshot.exists()) {
+    //create a new user record/document in the "users" table/collection
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+      });
+    } catch (error) {
+      console.log("error creating the user", error.message);
+    }
+    return userDocRef;
   } else {
-    console.log("User does not exist in database");
+    console.log("User exists in database");
+    console.log(userSnapshot);
+    return userDocRef;
   }
 };
