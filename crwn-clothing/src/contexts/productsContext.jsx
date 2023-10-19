@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
-import { addCollectionAndDocuments } from "../utils/firebase/firebase";
-import SHOP_DATA from "../data/shop-data.js";
+import { getCategoriesAndDocuments } from "../utils/firebase/firebase";
+// import SHOP_DATA from "../data/shop-data.js";
 
 // as the actual value you want to access
 export const ProductsContext = createContext({
@@ -13,8 +13,17 @@ export const ProductsProvider = ({ children }) => {
   const value = { products, setProducts };
 
   //Add records (documents) from json/js file to DB table/collection
+  // useEffect(() => {
+  //   addCollectionAndDocuments("categories", SHOP_DATA);
+  // }, []);
+
+  //Get Categories collection with documents
   useEffect(() => {
-    addCollectionAndDocuments("categories", SHOP_DATA);
+    const getCategoriesMap = async () => {
+      const categoryMap = await getCategoriesAndDocuments();
+      console.log(categoryMap);
+    };
+    getCategoriesMap();
   }, []);
 
   return (
