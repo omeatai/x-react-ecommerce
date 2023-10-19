@@ -11,7 +11,14 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -34,6 +41,8 @@ googleProvider.setCustomParameters({
 });
 
 export const auth = getAuth();
+
+//Sign in with Google Auth
 export const signInWithGooglePopup = () =>
   signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = () =>
@@ -42,6 +51,25 @@ export const signInWithGoogleRedirect = () =>
 //Check if the user record (document) exists in Firebase
 export const db = getFirestore();
 
+//Create a new table/collection and add records (documents) to it
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd,
+  field = "title"
+) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object[field].toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("done....");
+};
+
+//Create a new user record (document) in the "users" table/collection
 export const createUserDocumentFromAuth = async (userAuth) => {
   if (!userAuth) {
     return;
@@ -53,11 +81,8 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   // get the user record (document) in the "users" table/collection
   const userSnapshot = await getDoc(userDocRef);
 
-  // Checks if record (document) exists
-  //   console.log(userSnapshot.exists());
-
   if (!userSnapshot.exists()) {
-    //create a new user record/document in the "users" table/collection
+    //create a new user record (document) in the "users" table/collection
     const { displayName, email } = userAuth;
     const createdAt = new Date();
     try {
@@ -70,12 +95,12 @@ export const createUserDocumentFromAuth = async (userAuth) => {
       console.log("error creating the user", error.message);
     }
   } else {
-    // console.log("User exists in database");
-    console.log(userSnapshot);
+    // console.log(userSnapshot);
   }
   return userDocRef;
 };
 
+//Create a new user record in Google Auth with Username and Password
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) {
     return;
@@ -83,6 +108,7 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
   return await createUserWithEmailAndPassword(auth, email, password);
 };
 
+//Sign in with Username and Password
 export const signInAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) {
     return;
@@ -90,7 +116,9 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
   return await signInWithEmailAndPassword(auth, email, password);
 };
 
+//Sign out With Google Auth
 export const signOutUser = async () => await signOut(auth);
 
+//Auth Listener Event Handler
 export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);

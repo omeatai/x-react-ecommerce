@@ -1,5 +1,6 @@
-import React, { createContext, useState } from "react";
-import PRODUCTS from "../data/shop-data.json";
+import React, { createContext, useState, useEffect } from "react";
+import { addCollectionAndDocuments } from "../utils/firebase/firebase";
+import SHOP_DATA from "../data/shop-data.js";
 
 // as the actual value you want to access
 export const ProductsContext = createContext({
@@ -8,8 +9,13 @@ export const ProductsContext = createContext({
 });
 
 export const ProductsProvider = ({ children }) => {
-  const [products, setProducts] = useState(PRODUCTS);
+  const [products, setProducts] = useState([]);
   const value = { products, setProducts };
+
+  //Add records (documents) from json/js file to DB table/collection
+  useEffect(() => {
+    addCollectionAndDocuments("categories", SHOP_DATA);
+  }, []);
 
   return (
     <ProductsContext.Provider value={value}>
