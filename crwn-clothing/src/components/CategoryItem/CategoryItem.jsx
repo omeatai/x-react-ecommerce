@@ -4,7 +4,7 @@ import "./CategoryItem.scss";
 const CategoryItem = ({ category }) => {
   const { imageUrl, title } = category;
   return (
-    <div className="category-container">
+    <div className="category-item-container">
       <div
         className="background-image"
         style={{
@@ -18,4 +18,7 @@ const CategoryItem = ({ category }) => {
     </div>
   );
 };
+
 export default CategoryItem;
+
+//
