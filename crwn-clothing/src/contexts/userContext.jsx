@@ -17,6 +17,10 @@ export const USER_ACTION_TYPES = {
   SET_CURRENT_USER: "SET_CURRENT_USER",
 };
 
+const INITIAL_STATE = {
+  currentUser: null,
+};
+
 const userReducer = (state, action) => {
   console.log("Dispatched");
   console.log("Action: ", action);
@@ -28,17 +32,9 @@ const userReducer = (state, action) => {
         ...state,
         currentUser: payload,
       };
-    // case "increment":
-    //   return {
-    //     value: state.value + 1,
-    //   };
     default:
       throw new Error(`Unhandled type ${type} in userReducer`);
   }
-};
-
-const INITIAL_STATE = {
-  currentUser: null,
 };
 
 export const UserProvider = ({ children }) => {
