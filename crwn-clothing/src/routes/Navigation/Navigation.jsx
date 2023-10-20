@@ -1,16 +1,15 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import { Outlet } from "react-router-dom";
-
 import { ReactComponent as CrwnLogo } from "../../assets/crown.svg";
-// import { UserContext } from "../../contexts/userContext";
-import { CartContext } from "../../contexts/cartContext";
-import { signOutUser } from "../../utils/firebase/firebase";
 
+import { signOutUser } from "../../utils/firebase/firebase";
 import CartIcon from "../../components/CartIcon/CartIcon";
 import CartDropDown from "../../components/CartDropDown/CartDropDown";
 
+// import { CartContext } from "../../contexts/cartContext";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/userSelector";
+import { selectIsCartOpen } from "../../store/cart/cartSelector";
 
 import {
   NavigationContainer,
@@ -21,10 +20,9 @@ import {
 
 const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser);
-  // const currentUser = useSelector((state) => state.user.currentUser);
-  // const { currentUser } = useContext(UserContext);
 
-  const { isCartOpen } = useContext(CartContext);
+  // const { isCartOpen } = useContext(CartContext);
+  const isCartOpen = useSelector(selectIsCartOpen);
 
   const getEmailUsername = (email) => {
     const re = /(.*)@.+/;

@@ -7,7 +7,7 @@ import { store } from "./store/store";
 import App from "./App";
 // import { UserProvider } from "./contexts/userContext";
 // import { CategoriesProvider } from "./contexts/categoriesContext";
-import { CartProvider } from "./contexts/cartContext";
+// import { CartProvider } from "./contexts/cartContext";
 
 import "./index.scss";
 
@@ -18,15 +18,12 @@ root.render(
       <BrowserRouter>
         {/* <UserProvider> */}
         {/* <CategoriesProvider> */}
-        <CartProvider>
-          <App />
-        </CartProvider>
+        {/* <CartProvider> */}
+        <App />
+        {/* </CartProvider> */}
         {/* </CategoriesProvider> */}
         {/* </UserProvider> */}
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );
-
-//
-//
