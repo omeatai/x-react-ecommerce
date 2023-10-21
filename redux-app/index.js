@@ -1,10 +1,15 @@
 // import redux from 'redux';
 // import { legacy_createStore as createStore } from 'redux';
 // import { combineReducers } from "redux";
+// import logger from 'redux-logger'
 
 const redux = require("redux");
+const reduxLogger = require("redux-logger");
+
 const createStore = redux.legacy_createStore;
 const combineReducers = redux.combineReducers;
+const applyMiddleware = redux.applyMiddleware;
+const logger = reduxLogger.createLogger();
 
 //action type
 const BUY_CAKE = "BUY_CAKE";
@@ -96,12 +101,13 @@ const rootReducer = combineReducers({
 });
 
 //create store
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(logger));
 console.log("Initial state", store.getState());
 
 //listener service
-const unsubscribe = store.subscribe(() =>
-  console.log("Updated state", store.getState())
+const unsubscribe = store.subscribe(
+  () => {}
+  //   console.log("Updated state", store.getState()
 );
 
 //perform action
